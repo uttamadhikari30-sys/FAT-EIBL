@@ -1,0 +1,21 @@
+# ---------- Frontend Dockerfile ----------
+FROM node:20-alpine
+WORKDIR /app
+
+# Copy dependencies first
+COPY package*.json ./
+
+# Install with legacy peer deps to skip version conflict
+RUN npm install --legacy-peer-deps
+
+# Copy the app source code
+COPY . .
+
+# Build the frontend (Vite)
+RUN npm run build
+
+# Serve the built app
+RUN npm install -g serve
+CMD ["serve", "-s", "dist"]
+
+EXPOSE 3000
